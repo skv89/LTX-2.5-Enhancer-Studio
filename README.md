@@ -12,6 +12,20 @@ SHA-256:
 
 The executable is portable; no installer is required. ComfyUI and the required models must be configured through the application's **Setup / Dependencies** page.
 
+## Screenshots
+
+### Interactive temporal preview — enhanced result
+
+![LTX-2.5 Enhancer Studio showing an enhanced temporal video preview](screenshots/video-enhancer-enhanced-preview.png)
+
+### Interactive temporal preview — hold-to-compare original
+
+![LTX-2.5 Enhancer Studio showing the original video frame for comparison](screenshots/video-enhancer-original-preview.png)
+
+### Setup and dependency verification
+
+![LTX-2.5 Enhancer Studio showing all 50 required components verified](screenshots/setup-dependencies-verified.png)
+
 This is a community application using the currently pinned CQdesign enhancer LoRAs and ComfyUI. It is not affiliated with or endorsed by CQdesign or the ComfyUI project.
 
-This public repository is an executable-only distribution and does not contain the application source. GitHub's automatically generated archives contain only this release README.
+This public repository is an executable-only distribution and does not contain the application source. GitHub's automatically generated v1.0.0 archives contain only the release README.
