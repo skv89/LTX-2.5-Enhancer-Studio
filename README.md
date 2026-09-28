@@ -48,7 +48,7 @@ Choose **Lanczos-3**, **Spline36**, **EWA Lanczos (GPU)**, **Catmull-Rom**, or *
 
 ## Screenshots
 
-These examples show the v1.0.0 interface; v1.1.0 adds the title-bar readings and updated controls described above.
+The first three examples show the v1.0.0 interface. The four v1.1.0 examples below show the updated video controls and original/enhanced preview comparison.
 
 ### Interactive temporal preview — enhanced result
 
@@ -61,6 +61,22 @@ These examples show the v1.0.0 interface; v1.1.0 adds the title-bar readings and
 ### Setup and dependency verification
 
 ![LTX-2.5 Enhancer Studio showing setup and dependency verification](screenshots/setup-dependencies-verified.png)
+
+### v1.1.0 video enhancement — enhanced preview
+
+![LTX-2.5 Enhancer Studio v1.1.0 showing video settings and the enhanced temporal preview](screenshots/video-enhancer-v110-enhanced-preview.png)
+
+### v1.1.0 video enhancement — original preview
+
+![LTX-2.5 Enhancer Studio v1.1.0 showing the original frame while comparing a temporal preview](screenshots/video-enhancer-v110-original-preview.png)
+
+### Temporal preview detail — original
+
+![Close-up of the original video in the temporal preview](screenshots/temporal-preview-v110-original-detail.png)
+
+### Temporal preview detail — enhanced
+
+![Close-up of the enhanced video in the temporal preview](screenshots/temporal-preview-v110-enhanced-detail.png)
 
 This is an independent community application using CQdesign's enhancer LoRAs and workflows with ComfyUI. It is not affiliated with or endorsed by CQdesign or the ComfyUI project.
 
