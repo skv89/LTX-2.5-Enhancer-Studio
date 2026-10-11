@@ -1,85 +1,83 @@
 # LTX-2.5 Enhancer Studio
 
-Enhance videos and images with LTX-2.5 and CQdesign's enhancer LoRAs in a portable Windows app. Preview a short section, compare it with the original, and queue full videos for processing.
+Restore videos and images with LTX-2.5 and CQdesign's enhancer LoRAs in a portable Windows app. Compare a short preview before processing a full video, or use the built-in Benchmark to find useful settings for your computer.
 
 ## Download
 
-Download **LTX25_Enhancer_Studio.exe** from the [v1.1.0 release](https://github.com/skv89/LTX-2.5-Enhancer-Studio/releases/tag/v1.1.0). No app installer is required.
+Download **[LTX25_Enhancer_Studio.exe](https://github.com/skv89/LTX-2.5-Enhancer-Studio/releases/tag/v1.2.0)**. Only the EXE is needed to start; no app installer is required. First-time setup downloads the AI engine, tools and models separately.
 
-Only the EXE is needed to start. The two third-party ZIP files provide dependency licenses and corresponding library sources; they are not needed to run the app and do not contain this application's source code.
+The EXE is unsigned, so Windows may show an unfamiliar-app warning. Use this repository's release and the accompanying **SHA256SUMS.txt** to verify your download.
 
-The executable is unsigned, so Windows may show an unfamiliar-app warning. Download only from this repository and check the release's SHA-256 if you need to verify the file.
+## What's new in 1.2.0
 
-## What's new in 1.1.0
+| Feature | What it does |
+| --- | --- |
+| Benchmark tab | Compare chunk sizes, temporal overlap, attention, model/precision, restoration steps and separate encoding/decoding tiles. See every chunk's FPS, warmed FPS, percentage change from your saved baseline and peak memory in one table. |
+| Optional attention backends | Adds SageAttention 3 and Sparge + SageAttention 2 on supported setups. Setup checks the selected engine's compatibility. Sparge lets you choose the percentage of attention blocks retained. |
+| Model and speed controls | Choose Standard INT8 ConvRot or the experimental NVFP4 distilled model in Video Enhancer and Benchmark. Standard also offers experimental 6- and 4-step restoration. |
+| Sound and subtitles | Copies all original audio and embedded subtitle tracks without re-encoding, keeping their order and track information. Automatically tries MKV when MP4 or MOV cannot hold them. |
+| Better preview and guidance | Adds fullscreen preview, paired original/processed screenshots, source-video information and more specific hover help. |
+| Everyday reliability | Fixes attention-menu editing, benchmark row alignment, saved baseline comparisons, ComfyUI startup and the Windows taskbar icon. Video model filenames are managed automatically so previews and production use the same selected model recipe. |
 
-- **Automatic setup:** downloads and sets up the AI engine, required tools and models. You do not need to install ComfyUI manually or find downloads yourself.
-- **Updated CQ V2 video enhancement:** 30 FPS output by default, with optional source-frame-rate output and explanatory hover help.
-- **Better MKV browsing:** faster loading and timeline seeking for large FFV1 MKV files, with correct display proportions for anamorphic video.
-- **Optional input downscaling:** choose 1/2, 1/3 or 1/4 size and one of five filters before AI enhancement. Temporal previews use the same selection, limited to the chosen preview context.
-- **Clearer progress:** live average processing FPS, smoother remaining-time estimates, and title-bar system readings including GPU board power and its peak.
-- **Easier everyday use:** opens maximized on Video Enhancer, fixes numeric-arrow controls, and asks before closing during processing.
-- **Reliability improvements:** Windows startup, preview loading, ComfyUI logging recovery and temporary-file handling. Automatic setup includes the required cuDNN 9.24 runtime and checks it before rendering.
+### Benchmark
+
+Use a reproducible generated clip or your own video. Input/output resolution is shared by every test row. Edit a cell with one click, resize columns, drag rows into order, and use Delete, Ctrl+Z or Ctrl+Y. Chunk sizes round to the nearest value that avoids frame padding.
+
+Warm-up chunks are marked **W** and excluded from warmed FPS. The baseline remains saved across runs until you replace it. **Stop after chunk** finishes the current chunk; **Stop now** cancels the current test. Recoverable row failures can move on to the next test; unsafe or unresponsive engine states stop the campaign.
+
+The example below is an unrun test list, not a speed claim. Benchmark measures video processing without audio or the final delivery encode. Actual aligned output dimensions are shown above the table. Its peak memory columns include other running apps: total system RAM and total GPU memory, not just ComfyUI.
+
+![LTX-2.5 Enhancer Studio 1.2.0 Benchmark with example attention and precision test rows](screenshots/benchmark-v120.png)
 
 ## Getting started
 
-1. Open the EXE, go to **Setup / Dependencies**, and click **Set up automatically**. Review the download size and location, then follow the on-screen steps. First-time setup downloads large files and can take a while.
-2. If asked, sign in to Hugging Face and accept the model's access terms. The app provides the links; you do not need to locate model files yourself.
-3. Once setup is ready, choose a video or image. Start with the default enhancement settings.
-4. For video, move to a frame and select **Render Temporal Preview**. The preview uses its own temporal-context setting, not the full production chunk window. Some extra padding frames may be needed internally.
+1. Open the EXE, go to **Setup / Dependencies**, and select **Set up automatically**. Review the download size and destination before continuing.
+2. If requested, sign in to Hugging Face and accept the model's access terms using the supplied links.
+3. Choose a video or image. Start with the standard settings.
+4. For video, select **Render Temporal Preview** and compare with the original. Preview context is separate from the full-video chunk size.
 5. Select **Add to Queue**, then **Start / Resume** in **Batch Queue**.
 
-Updating from 1.0.0? Close the old app before replacing its EXE. Use **Set up automatically** to check for required updates, then **Verify All**. Existing independently managed ComfyUI installations remain supported but may need a separately approved repair to meet the requirements.
+To update, close the old app before replacing its EXE. Keep your existing settings and engine. Open **Setup / Dependencies** and use **Verify All**; optional attention backends have their own check/install controls. Independently managed ComfyUI installations may need a separately approved repair.
 
-## Downscaling before enhancement
+## Choosing speed and quality
 
-Try reducing a 1080p source to 1/2 or 1/3 size before enhancing it back to your target size. This usually improves reconstructed small or distant faces, but it also removes source detail so is not guaranteed to improve every clip. Compare a temporal preview first.
+- **Built-in attention and Standard INT8 ConvRot** are the starting point. Optional attention is not faster for every chunk size or computer; compare warmed FPS on your own system.
+- **NVFP4 uses a different, already-distilled model**, not just a lower-precision copy of Standard. It requires a compatible Blackwell setup and an additional model download. It uses 8 restoration steps and disables the extra distilled LoRA.
+- **Fewer restoration steps and lower Sparge retention** can change detail or motion. Compare a representative preview before processing a long video.
+- **Smaller chunks and tiles** can help with memory pressure. Larger chunks are not automatically faster. Encoding and decoding have separate tile controls.
+- **Pre-downscale** can help reconstruct small or distant faces, but also removes source detail. Compare the original and enhanced result before choosing it.
 
-Choose **Lanczos-3**, **Spline36**, **EWA Lanczos (GPU)**, **Catmull-Rom**, or **Mitchell cubic**. Each applies anti-aliasing during reduction; hover help explains the trade-offs. EWA requires compatible Vulkan support and an FFmpeg build with the necessary GPU filter. Downscaled working clips use lossless FFV1 v3 MKV encoding; reducing the image dimensions itself is not lossless. The original comparison continues to show your untouched source.
+## Sound and subtitles
 
-## Requirements and important notes
+Leave **Keep original audio and subtitles** on to preserve every source audio/subtitle track. If neither the chosen container nor MKV can copy a track, export stops with an error rather than silently dropping or converting it. Trims follow compressed-packet boundaries.
 
-- Automatic setup requires 64-bit Windows and a supported NVIDIA RTX graphics card with a working driver. Larger target sizes and chunk windows need more graphics memory.
-- Allow roughly **135 GB of free space for first-time setup**, plus room for videos and working files. Setup shows the required space and downloads before you confirm.
-- Some model downloads require a Hugging Face account and acceptance of the model's access terms.
-- Rendering requires **cuDNN 9.24.x**. Automatic setup handles this for the app-managed engine; independently managed installations require separate repair approval when needed.
-- Long videos run in sequential overlapping windows and are combined into one output. Matching the source frame rate is optional and happens during the final encode, not a second AI pass.
-- The FFV1 compatibility viewer supports timeline seeking and still-frame comparison, but not continuous Play. Other supported formats retain normal playback.
-- Enhancement can reconstruct faces, lettering and textures differently. Check important details carefully. Smaller targets and chunk windows can help when memory is limited.
+**Use audio to guide restoration** is a separate, optional AI setting and is off by default. When enabled, choose one source audio track to guide the picture. It is not audio cleanup or a guaranteed lip-sync fix; generated sound is never exported. This choice does not limit which original tracks are copied.
 
-## Screenshots
+## Requirements and limitations
 
-The first three examples show the v1.0.0 interface. The four v1.1.0 examples below show the updated video controls and original/enhanced preview comparison.
+- 64-bit Windows, a supported NVIDIA RTX GPU and a working driver. Memory requirements depend on the model, resolution and chunk size; a particular low-memory card is not guaranteed by the high-memory test results.
+- Allow roughly **135 GB** for standard first-time setup, plus space for media and working files. Optional models require more. Setup displays the actual downloads before confirmation.
+- Some model downloads require Hugging Face access approval. Rendering requires **cuDNN 9.24.x**; automatic setup handles this for the app-managed engine.
+- Optional Sage/Sparge backends require a matching GPU and Python/Torch/CUDA stack. Setup reports unsupported combinations instead of silently changing your installed Torch.
+- **Benchmark specifically** requires a local ComfyUI engine, exactly one physical NVIDIA GPU using its default CUDA device 0, and working temperature/memory readings. Remote engines, multiple NVIDIA GPUs and remapped devices are not supported by Benchmark's safety monitor.
+- Video processing uses 30 FPS internally. Matching the source frame rate is an optional final-output setting, not another AI pass.
+- The FFV1 compatibility viewer supports seeking and still-frame comparison, not continuous Play.
+- AI enhancement may change faces, lettering and textures. Check important details. No universal speed or quality improvement is promised.
 
-### Interactive temporal preview — enhanced result
+## Preview examples
 
-![LTX-2.5 Enhancer Studio showing an enhanced temporal video preview](screenshots/video-enhancer-enhanced-preview.png)
+These previously published examples show the v1.1.0 interface; the v1.2.0 Benchmark screenshot above shows the newer layout.
 
-### Interactive temporal preview — hold-to-compare original
+### Original
 
-![LTX-2.5 Enhancer Studio showing the original video frame for comparison](screenshots/video-enhancer-original-preview.png)
+![Original video frame in the temporal preview](screenshots/temporal-preview-v110-original-detail.png)
 
-### Setup and dependency verification
+### Enhanced
 
-![LTX-2.5 Enhancer Studio showing setup and dependency verification](screenshots/setup-dependencies-verified.png)
+![Enhanced video frame in the temporal preview](screenshots/temporal-preview-v110-enhanced-detail.png)
 
-### v1.1.0 video enhancement — enhanced preview
+## Credits and licenses
 
-![LTX-2.5 Enhancer Studio v1.1.0 showing video settings and the enhanced temporal preview](screenshots/video-enhancer-v110-enhanced-preview.png)
+An independent community application using [CQdesign's enhancer LoRAs and workflows](https://huggingface.co/CQdesign/LTX-2.5-CQ-Video-and-Image-Enhancer-LoRAs), LTX-2.5 and ComfyUI. Not affiliated with or endorsed by their authors.
 
-### v1.1.0 video enhancement — original preview
-
-![LTX-2.5 Enhancer Studio v1.1.0 showing the original frame while comparing a temporal preview](screenshots/video-enhancer-v110-original-preview.png)
-
-### Temporal preview detail — original
-
-![Close-up of the original video in the temporal preview](screenshots/temporal-preview-v110-original-detail.png)
-
-### Temporal preview detail — enhanced
-
-![Close-up of the enhanced video in the temporal preview](screenshots/temporal-preview-v110-enhanced-detail.png)
-
-This is an independent community application using CQdesign's enhancer LoRAs and workflows with ComfyUI. It is not affiliated with or endorsed by CQdesign or the ComfyUI project.
-
-## Third-party licenses
-
-Qt, PySide6 and Shiboken are used under LGPLv3; the bundled FFmpeg playback libraries are used under LGPLv2.1-or-later. Download **LTX25_Enhancer_Studio_1.1.0_ThirdPartyNotices.zip** for licenses, attribution and library-replacement instructions. Matching library sources and upstream build files are supplied in **LTX25_Enhancer_Studio_1.1.0_ThirdPartySources.zip** on the same release page.
+The release includes **LTX25_Enhancer_Studio_1.2.0_ThirdPartyNotices.zip** with attribution, licenses and library-replacement instructions. The unchanged Qt/PySide/Shiboken and FFmpeg playback libraries use LGPL terms; their matching sources remain in **LTX25_Enhancer_Studio_1.1.0_ThirdPartySources.zip**, also attached to this release. The retained filename reflects unchanged library sources, not an old application download. These archives are not needed to run the app and do not contain this application's source code. Optional attention components retain their included Apache-2.0 and BSD notices; models and separately installed tools retain their own terms.
