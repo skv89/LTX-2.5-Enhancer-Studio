@@ -4,11 +4,29 @@ Restore videos and images with LTX-2.5 and CQdesign's enhancer LoRAs in a portab
 
 ## Download
 
-Download **[LTX25_Enhancer_Studio.exe](https://github.com/skv89/LTX-2.5-Enhancer-Studio/releases/tag/v1.2.0)**. Only the EXE is needed to start; no app installer is required. First-time setup downloads the AI engine, tools and models separately.
+Download **[LTX25_Enhancer_Studio.exe](https://github.com/skv89/LTX-2.5-Enhancer-Studio/releases/tag/v1.2.1)**. Only the EXE is needed to start; no app installer is required. First-time setup downloads the AI engine, tools and models separately.
 
 The EXE is unsigned, so Windows may show an unfamiliar-app warning. Use this repository's release and the accompanying **SHA256SUMS.txt** to verify your download.
 
-## What's new in 1.2.0
+## What's new in 1.2.1
+
+| Issue | What's changed |
+| --- | --- |
+| [#1](https://github.com/skv89/LTX-2.5-Enhancer-Studio/issues/1) | **2× LiveAction SPAN** adds frame-by-frame restoration and 2× upscaling for video. It works in previews and queued jobs. |
+| [#2](https://github.com/skv89/LTX-2.5-Enhancer-Studio/issues/2) | Setup uses a shorter extraction path for KJNodes, fixing the reported installation failure on long Windows paths. |
+| [#3](https://github.com/skv89/LTX-2.5-Enhancer-Studio/issues/3) | Long video exports avoid Windows' command-line limit. When final export fails, Studio saves the completed chunks so you can retry from **Batch Queue**. |
+
+### Use LiveAction SPAN
+
+In **Video Enhancer → Model / precision**, choose **2× LiveAction SPAN** and click **Install LiveAction model**. The app copies the bundled model to your selected ComfyUI models folder. The model doubles the dimensions after any pre-downscale. Each selected frame is processed independently. Output uses the source's average frame rate divided by the frame stride.
+
+### Recover a failed export
+
+If enhancement finished and export failed, find the job's working folder in the log. In **Batch Queue**, click **Recover export**, select the folder's `assembly.json`, and choose where to save the video. Recovery uses the record and chunks saved by v1.2.1. Keep the working folder until you have verified the recovered video. If the job copies original audio or subtitles, keep the source file available too.
+
+![Batch Queue with the Recover export button next to Clear Completed](screenshots/recover-export-v121.png)
+
+## Other features
 
 | Feature | What it does |
 | --- | --- |
@@ -37,7 +55,7 @@ The example below is an unrun test list, not a speed claim. Benchmark measures v
 4. For video, select **Render Temporal Preview** and compare with the original. Preview context is separate from the full-video chunk size.
 5. Select **Add to Queue**, then **Start / Resume** in **Batch Queue**.
 
-To update, close the old app before replacing its EXE. Keep your existing settings and engine. Open **Setup / Dependencies** and use **Verify All**; optional attention backends have their own check/install controls. Independently managed ComfyUI installations may need a separately approved repair.
+To update, close the old app before replacing its EXE. Keep your existing settings and engine. Open **Setup / Dependencies** and use **Verify All**. If setup previously stopped while extracting KJNodes, retry **Set up automatically**. Optional attention backends have their own check/install controls. Independently managed ComfyUI installations may need a separately approved repair.
 
 ## Choosing speed and quality
 
@@ -60,7 +78,7 @@ Leave **Keep original audio and subtitles** on to preserve every source audio/su
 - Some model downloads require Hugging Face access approval. Rendering requires **cuDNN 9.24.x**; automatic setup handles this for the app-managed engine.
 - Optional Sage/Sparge backends require a matching GPU and Python/Torch/CUDA stack. Setup reports unsupported combinations instead of silently changing your installed Torch.
 - **Benchmark specifically** requires a local ComfyUI engine, exactly one physical NVIDIA GPU using its default CUDA device 0, and working temperature/memory readings. Remote engines, multiple NVIDIA GPUs and remapped devices are not supported by Benchmark's safety monitor.
-- Video processing uses 30 FPS internally. Matching the source frame rate is an optional final-output setting, not another AI pass.
+- LTX-2.5 video restoration processes at 30 FPS. You can choose the source frame rate for the final export. LiveAction SPAN uses the selected source frames and delivers at their average rate.
 - The FFV1 compatibility viewer supports seeking and still-frame comparison, not continuous Play.
 - AI enhancement may change faces, lettering and textures. Check important details. No universal speed or quality improvement is promised.
 
@@ -80,4 +98,6 @@ These previously published examples show the v1.1.0 interface; the v1.2.0 Benchm
 
 An independent community application using [CQdesign's enhancer LoRAs and workflows](https://huggingface.co/CQdesign/LTX-2.5-CQ-Video-and-Image-Enhancer-LoRAs), LTX-2.5 and ComfyUI. Not affiliated with or endorsed by their authors.
 
-The release includes **LTX25_Enhancer_Studio_1.2.0_ThirdPartyNotices.zip** with attribution, licenses and library-replacement instructions. The unchanged Qt/PySide/Shiboken and FFmpeg playback libraries use LGPL terms; their matching sources remain in **LTX25_Enhancer_Studio_1.1.0_ThirdPartySources.zip**, also attached to this release. The retained filename reflects unchanged library sources, not an old application download. These archives are not needed to run the app and do not contain this application's source code. Optional attention components retain their included Apache-2.0 and BSD notices; models and separately installed tools retain their own terms.
+The bundled [2× LiveAction SPAN model](https://github.com/jcj83429/upscaling/tree/5d8cdd2e17750b64be39ccab3a8763d91128fe15/2xLiveActionV1_SPAN) is by jcj83429 and uses the Apache-2.0 license.
+
+The release includes **LTX25_Enhancer_Studio_1.2.1_ThirdPartyNotices.zip** with attribution, licenses and library-replacement instructions. The unchanged Qt/PySide/Shiboken and FFmpeg playback libraries use LGPL terms; their matching sources remain in **LTX25_Enhancer_Studio_1.1.0_ThirdPartySources.zip**, also attached to this release. The retained filename reflects unchanged library sources, not an old application download. These archives are not needed to run the app and do not contain this application's source code. Optional attention components retain their included Apache-2.0 and BSD notices; models and separately installed tools retain their own terms.
